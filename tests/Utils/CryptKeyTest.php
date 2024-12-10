@@ -5,9 +5,6 @@ namespace LeagueTests\Utils;
 use League\OAuth2\Server\CryptKey;
 use PHPUnit\Framework\TestCase;
 
-use function openssl_pkey_export;
-use function openssl_pkey_new;
-
 class CryptKeyTest extends TestCase
 {
     public function testNoFile()
@@ -62,18 +59,13 @@ class CryptKeyTest extends TestCase
 
         try {
             // Create the keypair
-            $res = openssl_pkey_new([
+            $res = \openssl_pkey_new([
                 'digest_alg' => 'sha512',
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_DSA,
             ]);
-
-            if ($res === false) {
-                self::fail('The keypair was not created');
-            }
-
             // Get private key
-            openssl_pkey_export($res, $keyContent, 'mystrongpassword');
+            \openssl_pkey_export($res, $keyContent, 'mystrongpassword');
             $path = self::generateKeyPath($keyContent);
 
             new CryptKey($keyContent, 'mystrongpassword');
