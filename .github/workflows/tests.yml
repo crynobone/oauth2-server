@@ -28,6 +28,10 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip
           coverage: pcov
+ 
+      - name: Remove Security Advisories on obsolete PHP versions
+        run: composer remove "roave/security-advisories" --dev --no-update
+        if: matrix.php <= 7.4
 
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
